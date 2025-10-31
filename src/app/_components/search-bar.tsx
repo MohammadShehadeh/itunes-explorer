@@ -2,50 +2,55 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Search, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { Field } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
-import { useAppTransition } from "@/providers/transition-provider";
 
 const formSchema = z.object({
   query: z.string().trim().min(2).max(50),
 });
 
 export const SearchBarForm = () => {
-  const { startAppTransition, isPending, addOptimisticQuery, optimisticQuery } = useAppTransition();
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query") ?? "";
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      query: optimisticQuery ?? "",
+      query,
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    /**
-     * If the form is submitting or search query is the same as the previous query, return.
-     * Otherwise, start a transition and push the new query to the URL.
-     */
-    if (isPending || optimisticQuery === data.query) return;
+  const createQueryString = (name: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
 
-    startAppTransition(() => {
-      addOptimisticQuery(data.query);
-      router.push(`?query=${data.query}`, { scroll: false });
-    });
+    if (!value) {
+      params.delete(name);
+    } else {
+      params.set(name, value);
+    }
+  
+    return params.toString();
+  };
+
+  const pushQueryString = (name: string, value: string) => {
+    window.history.pushState({}, "", `?${createQueryString(name, value)}`);
+  };
+
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    if (query === data.query) return;
+
+    pushQueryString("query", data.query);
   }
 
   function onReset() {
-    if (isPending || !form.getValues("query")) return;
+    if (!form.getValues("query")) return;
 
     form.reset({ query: "" });
-
-    startAppTransition(() => {
-      addOptimisticQuery("");
-      router.push(`/`, { scroll: false });
-    });
+    pushQueryString("query", "");
   }
 
   return (
@@ -57,7 +62,6 @@ export const SearchBarForm = () => {
           <Field data-invalid={fieldState.invalid}>
             <InputGroup>
               <InputGroupInput
-                disabled={isPending}
                 placeholder="ابحث عن بودكاست..."
                 name={field.name}
                 value={field.value}
@@ -65,12 +69,7 @@ export const SearchBarForm = () => {
                 onBlur={field.onBlur}
                 aria-invalid={fieldState.invalid}
               />
-              <InputGroupAddon
-                aria-invalid={fieldState.invalid}
-                className="cursor-pointer"
-                disabled={isPending}
-                type="submit"
-              >
+              <InputGroupAddon aria-invalid={fieldState.invalid} className="cursor-pointer" type="submit">
                 <Search />
               </InputGroupAddon>
               <InputGroupAddon

@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import { use } from "react";
 import { If } from "@/components/if";
 import {
@@ -9,17 +11,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useAppTransition } from "@/providers/transition-provider";
 import type { RouterOutput } from "@/server/root";
+import { useTRPC } from "@/trpc/react";
 import { PodcastCard } from "./podcast-card";
 import { EmptyPodcastList, NoPodcastResults } from "./podcast-empty-states";
 import { PodcastListSkeleton } from "./podcast-skeletons";
 
 interface PodcastListProps {
   fetchResult: Promise<RouterOutput["search"]["get"]>;
-  initialData?: RouterOutput["search"]["get"];
-  variant?: "default" | "search";
-  title?: string;
 }
 
 interface SearchResultsHeaderProps {
@@ -29,28 +28,33 @@ export const SearchResultsHeader = ({ query }: SearchResultsHeaderProps) => {
   return <h2 className="text-2xl font-bold">نتائج البحث عن "{query}"</h2>;
 };
 
-export const PodcastSearchList = ({ initialData }: Omit<PodcastListProps, "fetchResult">) => {
-  const { isPending, optimisticQuery } = useAppTransition();
+export const PodcastSearchList = () => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query") ?? "";
+  const trpc = useTRPC();
+  const { data: podcastsData, isLoading } = useQuery(
+    trpc.search.get.queryOptions({ query }, { enabled: !!query }),
+  );
 
-  if (isPending) {
+  if (isLoading) {
     return (
-      <If condition={!!optimisticQuery}>
-        <SearchResultsHeader query={optimisticQuery} />
+      <If condition={!!query}>
+        <SearchResultsHeader query={query} />
         <PodcastListSkeleton />
       </If>
     );
   }
 
-  if (!initialData?.results.length) {
+  if (!podcastsData?.results.length) {
     return <NoPodcastResults />;
   }
 
   return (
     <>
-      <SearchResultsHeader query={optimisticQuery} />
+      <SearchResultsHeader query={query} />
       <Carousel>
         <CarouselContent>
-          {initialData.results.map((podcast) => (
+          {podcastsData.results.map((podcast) => (
             <CarouselItem key={podcast.collectionId}>
               <PodcastCard podcast={podcast} />
             </CarouselItem>

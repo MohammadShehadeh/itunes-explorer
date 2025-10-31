@@ -1,36 +1,24 @@
 import { Suspense } from "react";
-import { z } from "zod";
-import { If } from "@/components/if";
 import { Navbar } from "@/components/navbar";
-import { TransitionProvider } from "@/providers/transition-provider";
 import { api } from "@/trpc/server";
 import { PodcastList, PodcastSearchList } from "./_components/podcast-list";
 import { PodcastListSkeleton } from "./_components/podcast-skeletons";
 import { SearchBarForm } from "./_components/search-bar";
 
-const searchParamsSchema = z.object({
-  query: z.string().min(2).optional(),
-});
-
-export default async function HomePage(props: PageProps<"/">) {
-  const searchParams = await props.searchParams;
-  const { success, data } = searchParamsSchema.safeParse(searchParams);
-  const safeQuery = success ? (data?.query ?? "") : "";
-
-  const podcastsInitialData = await api.search.get({ query: safeQuery });
+export default async function HomePage() {
   const fanjanPromise = api.search.get({ query: "فنجان" });
   const newsPromise = api.search.get({ query: "الأخبار" });
   const comedyPromise = api.search.get({ query: "كوميديا" });
 
   return (
-    <TransitionProvider>
+    <>
       <Navbar>
         <SearchBarForm />
       </Navbar>
 
       <section className="space-y-18 container">
         <section className="space-y-4 empty:hidden">
-          <PodcastSearchList initialData={podcastsInitialData} />
+          <PodcastSearchList />
         </section>
 
         <section className="space-y-4">
@@ -54,6 +42,6 @@ export default async function HomePage(props: PageProps<"/">) {
           </Suspense>
         </section>
       </section>
-    </TransitionProvider>
+    </>
   );
 }
