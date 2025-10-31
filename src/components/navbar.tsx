@@ -28,7 +28,7 @@ export const Navbar = ({ className, children }: NavbarProps) => {
         className,
       )}
     >
-      <div className="container flex items-center justify-between">
+      <div className="container flex md:flex-row flex-col gap-2 md:justify-between justify-center items-center">
         <NavbarLogo />
         <nav className="flex items-center gap-2">{children}</nav>
       </div>

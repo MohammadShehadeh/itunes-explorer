@@ -35,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <Navbar>
                   <SearchBarForm />
                 </Navbar>
-                <main className="container">{children}</main>
+                <main className="container my-8">{children}</main>
                 <Footer />
               </HydrateClient>
             </TRPCReactProvider>

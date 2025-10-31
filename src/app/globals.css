@@ -121,6 +121,6 @@
   }
 
   .container {
-    @apply mx-auto max-w-450! px-4 py-6;
+    @apply mx-auto max-w-450! px-4 py-4;
   }
 }
