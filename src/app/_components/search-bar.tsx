@@ -32,7 +32,7 @@ export const SearchBarForm = () => {
     } else {
       params.set(name, value);
     }
-  
+
     return params.toString();
   };
 
