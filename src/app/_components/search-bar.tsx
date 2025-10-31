@@ -33,7 +33,7 @@ export const SearchBarForm = () => {
 
     startAppTransition(() => {
       addOptimisticQuery(data.query);
-      router.push(`?query=${data.query}`);
+      router.push(`?query=${data.query}`, { scroll: false });
     });
   }
 
@@ -44,7 +44,7 @@ export const SearchBarForm = () => {
 
     startAppTransition(() => {
       addOptimisticQuery("");
-      router.push(`/`);
+      router.push(`/`, { scroll: false });
     });
   }
 
