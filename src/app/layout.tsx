@@ -28,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Direction>
           <TRPCReactProvider>
             <HydrateClient>
-              <main className="container my-8">{children}</main>
+              <main>{children}</main>
               <Footer />
             </HydrateClient>
           </TRPCReactProvider>
