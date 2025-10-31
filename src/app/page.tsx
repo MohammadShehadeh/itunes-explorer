@@ -29,29 +29,27 @@ export default async function HomePage(props: PageProps<"/">) {
       </Navbar>
 
       <section className="space-y-18 container">
-        <If condition={!!safeQuery}>
-          <section className="space-y-4">
-            <Suspense fallback={<PodcastListSkeleton />}>
-              <PodcastSearchList fetchResult={podcastsPromise} />
-            </Suspense>
-          </section>
-        </If>
+        <section className="space-y-4 empty:hidden">
+          <Suspense fallback={<PodcastListSkeleton />}>
+            <PodcastSearchList fetchResult={podcastsPromise} />
+          </Suspense>
+        </section>
 
-        <section className="space-y-4 container">
+        <section className="space-y-4">
           <h2 className="text-2xl font-bold">أفضل البودكاست لـ فنجان</h2>
           <Suspense fallback={<PodcastListSkeleton />}>
             <PodcastList fetchResult={fanjanPromise} />
           </Suspense>
         </section>
 
-        <section className="space-y-4 container">
+        <section className="space-y-4">
           <h2 className="text-2xl font-bold">بودكاست أخبار</h2>
           <Suspense fallback={<PodcastListSkeleton />}>
             <PodcastList fetchResult={newsPromise} />
           </Suspense>
         </section>
 
-        <section className="space-y-4 container">
+        <section className="space-y-4">
           <h2 className="text-2xl font-bold">كوميديا وترفيه</h2>
           <Suspense fallback={<PodcastListSkeleton />}>
             <PodcastList fetchResult={comedyPromise} />

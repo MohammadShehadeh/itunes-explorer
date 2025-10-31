@@ -1,6 +1,7 @@
 "use client";
 
 import { use } from "react";
+import { If } from "@/components/if";
 import {
   Carousel,
   CarouselContent,
@@ -33,10 +34,10 @@ export const PodcastSearchList = ({ fetchResult }: PodcastListProps) => {
 
   if (isPending) {
     return (
-      <>
+      <If condition={!!optimisticQuery}>
         <SearchResultsHeader query={optimisticQuery} />
         <PodcastListSkeleton />
-      </>
+      </If>
     );
   }
 
