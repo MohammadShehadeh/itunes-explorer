@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { createContext, type ReactNode, useContext, useOptimistic, useTransition } from "react";
+import { createContext, type PropsWithChildren, useContext, useOptimistic, useTransition } from "react";
 
 type TransitionContextType = {
   isPending: boolean;
@@ -12,7 +12,7 @@ type TransitionContextType = {
 
 const TransitionContext = createContext<TransitionContextType | undefined>(undefined);
 
-export function TransitionProvider({ children }: { children: ReactNode }) {
+export function TransitionProvider({ children }: PropsWithChildren) {
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const [optimisticQuery, addOptimisticQuery] = useOptimistic<string, string>(
