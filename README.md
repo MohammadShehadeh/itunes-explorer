@@ -2,6 +2,8 @@
 
 A Next.js application for exploring iTunes content, built with modern web technologies.
 
+![iTunes Explorer Screenshot](./public/website.png)
+
 ## Tech Stack
 
 - **Framework**: [Next.js](https://nextjs.org) 16.0.1
