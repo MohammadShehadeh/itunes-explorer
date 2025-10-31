@@ -1,8 +1,10 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-
-import "./globals.css";
+import { TRPCReactProvider } from "@/trpc/react";
+import { HydrateClient } from "@/trpc/server";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-ibm-plex-sans-arabic",
@@ -19,9 +21,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ar">
-      <body className={`${ibmPlexSansArabic.className} antialiased`}>
-        <main>{children}</main>
-        <Toaster />
+      <body
+        className={`${ibmPlexSansArabic.className} min-h-screen bg-background text-foreground antialiased`}
+      >
+        <TRPCReactProvider>
+          <HydrateClient>
+            <main>{children}</main>
+            <Toaster />
+          </HydrateClient>
+        </TRPCReactProvider>
       </body>
     </html>
   );
