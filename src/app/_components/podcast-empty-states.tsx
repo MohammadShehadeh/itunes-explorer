@@ -1,9 +1,9 @@
 "use client";
 
 import { Headset } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-
+import { If } from "@/components/if";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { useAppTransition } from "@/providers/transition-provider";
 
 export const EmptyPodcastList = () => {
   return (
@@ -22,23 +22,21 @@ export const EmptyPodcastList = () => {
 };
 
 export const NoPodcastResults = () => {
-  const query = useSearchParams().get("query");
-
-  if (!query) {
-    return null;
-  }
+  const { optimisticQuery } = useAppTransition();
 
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <Headset />
-        </EmptyMedia>
-        <EmptyTitle>لا توجد نتائج مطابقة لـ "{query}"</EmptyTitle>
-        <EmptyDescription>
-          لم نجد أي بودكاست يطابق بحثك. حاول استخدام كلمات مختلفة أو تحقق من الإملاء.
-        </EmptyDescription>
-      </EmptyHeader>
-    </Empty>
+    <If condition={!!optimisticQuery}>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Headset />
+          </EmptyMedia>
+          <EmptyTitle>لا توجد نتائج مطابقة لـ "{optimisticQuery}"</EmptyTitle>
+          <EmptyDescription>
+            لم نجد أي بودكاست يطابق بحثك. حاول استخدام كلمات مختلفة أو تحقق من الإملاء.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    </If>
   );
 };
