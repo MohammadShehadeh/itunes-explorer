@@ -40,9 +40,10 @@ export const SearchBarForm = () => {
   function onReset() {
     if (isPending || !form.getValues("query")) return;
 
+    form.reset({ query: "" });
+
     startAppTransition(() => {
       addOptimisticQuery("");
-      form.reset({ query: "" });
       router.push(`/`);
     });
   }

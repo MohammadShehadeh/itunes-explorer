@@ -1,3 +1,4 @@
+import { If } from "@/components/if";
 import { Card, CardHeader } from "@/components/ui/card";
 import {
   Carousel,
@@ -21,11 +22,18 @@ export const PodcastCardSkeleton = () => {
   );
 };
 
-export const PodcastListSkeleton = () => {
+interface PodcastListSkeletonProps {
+  withTitle?: boolean;
+}
+
+export const PodcastListSkeleton = ({ withTitle = false }: PodcastListSkeletonProps) => {
   const SKELETON_ITEMS_COUNT = 8;
 
   return (
     <Carousel>
+      <If condition={withTitle}>
+        <Skeleton className="h-6 w-3/4" />
+      </If>
       <CarouselContent>
         {Array.from({ length: SKELETON_ITEMS_COUNT }).map((_, index) => (
           <CarouselItem key={index.toString()}>

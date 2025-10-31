@@ -17,7 +17,7 @@ export default async function HomePage(props: PageProps<"/">) {
   const { success, data } = searchParamsSchema.safeParse(searchParams);
   const safeQuery = success ? (data?.query ?? "") : "";
 
-  const podcastsPromise = api.search.get({ query: safeQuery });
+  const podcastsInitialData = await api.search.get({ query: safeQuery });
   const fanjanPromise = api.search.get({ query: "فنجان" });
   const newsPromise = api.search.get({ query: "الأخبار" });
   const comedyPromise = api.search.get({ query: "كوميديا" });
@@ -30,9 +30,7 @@ export default async function HomePage(props: PageProps<"/">) {
 
       <section className="space-y-18 container">
         <section className="space-y-4 empty:hidden">
-          <Suspense fallback={<PodcastListSkeleton />}>
-            <PodcastSearchList fetchResult={podcastsPromise} />
-          </Suspense>
+          <PodcastSearchList initialData={podcastsInitialData} />
         </section>
 
         <section className="space-y-4">

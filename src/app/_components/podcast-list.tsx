@@ -17,6 +17,7 @@ import { PodcastListSkeleton } from "./podcast-skeletons";
 
 interface PodcastListProps {
   fetchResult: Promise<RouterOutput["search"]["get"]>;
+  initialData?: RouterOutput["search"]["get"];
   variant?: "default" | "search";
   title?: string;
 }
@@ -28,8 +29,7 @@ export const SearchResultsHeader = ({ query }: SearchResultsHeaderProps) => {
   return <h2 className="text-2xl font-bold">نتائج البحث عن "{query}"</h2>;
 };
 
-export const PodcastSearchList = ({ fetchResult }: PodcastListProps) => {
-  const data = use(fetchResult);
+export const PodcastSearchList = ({ initialData }: Omit<PodcastListProps, "fetchResult">) => {
   const { isPending, optimisticQuery } = useAppTransition();
 
   if (isPending) {
@@ -41,7 +41,7 @@ export const PodcastSearchList = ({ fetchResult }: PodcastListProps) => {
     );
   }
 
-  if (data?.results.length === 0) {
+  if (!initialData?.results.length) {
     return <NoPodcastResults />;
   }
 
@@ -50,7 +50,7 @@ export const PodcastSearchList = ({ fetchResult }: PodcastListProps) => {
       <SearchResultsHeader query={optimisticQuery} />
       <Carousel>
         <CarouselContent>
-          {data?.results.map((podcast) => (
+          {initialData.results.map((podcast) => (
             <CarouselItem key={podcast.collectionId}>
               <PodcastCard podcast={podcast} />
             </CarouselItem>
