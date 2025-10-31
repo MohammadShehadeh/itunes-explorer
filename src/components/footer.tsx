@@ -8,8 +8,8 @@ import { Separator } from "./ui/separator";
 
 export const Footer = () => {
   return (
-    <footer className="container pt-16 pb-8">
-      <div className="flex flex-col items-center justify-center gap-4">
+    <footer className="py-4 mt-16 border-t">
+      <div className="flex flex-col items-center justify-center gap-4 container">
         <NavbarLogo />
         <Separator />
         <div className="flex gap-1">
