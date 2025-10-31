@@ -1,12 +1,12 @@
 "use client";
 
-import useEmblaCarousel, {
-  type UseEmblaCarouselType,
-} from "embla-carousel-react";
+import { useDirection } from "@radix-ui/react-direction";
+import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { EdgeFade } from "./edge-fade";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -50,8 +50,12 @@ function Carousel({
   children,
   ...props
 }: React.ComponentProps<"div"> & CarouselProps) {
+  const dir = useDirection();
   const [carouselRef, api] = useEmblaCarousel(
     {
+      dragFree: true,
+      direction: dir,
+      slidesToScroll: 5,
       ...opts,
       axis: orientation === "horizontal" ? "x" : "y",
     },
@@ -109,8 +113,7 @@ function Carousel({
         carouselRef,
         api: api,
         opts,
-        orientation:
-          orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+        orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
         scrollPrev,
         scrollNext,
         canScrollPrev,
@@ -119,7 +122,7 @@ function Carousel({
     >
       <div
         onKeyDownCapture={handleKeyDown}
-        className={cn("relative", className)}
+        className={cn("relative cursor-grab", className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
@@ -135,19 +138,13 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   const { carouselRef, orientation } = useCarousel();
 
   return (
-    <div
-      ref={carouselRef}
-      className="overflow-hidden"
-      data-slot="carousel-content"
-    >
+    <div ref={carouselRef} className="overflow-hidden relative" data-slot="carousel-content">
       <div
-        className={cn(
-          "flex",
-          orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
-          className,
-        )}
+        className={cn("flex", orientation === "horizontal" ? "-ms-4" : "-mt-4 flex-col", className)}
         {...props}
       />
+      <EdgeFade position="left" width="w-6" height="h-full" fromColor="from-background" />
+      <EdgeFade position="right" width="w-6" height="h-full" fromColor="from-background" />
     </div>
   );
 }
@@ -161,8 +158,8 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
+        "min-w-0 shrink-0 grow-0 basis-full max-w-2xs",
+        orientation === "horizontal" ? "ps-4" : "pt-4",
         className,
       )}
       {...props}
@@ -184,17 +181,21 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
+        "absolute size-8 rounded-full md:flex hidden",
         orientation === "horizontal"
-          ? "top-1/2 -left-12 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+          ? "top-1/2 -start-12 -translate-y-1/2"
+          : "-top-12 start-1/2 -translate-x-1/2 rotate-90",
         className,
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
+      {orientation === "horizontal" ? (
+        <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+      ) : (
+        <ArrowLeft className="h-4 w-4" />
+      )}
       <span className="sr-only">Previous slide</span>
     </Button>
   );
@@ -214,27 +215,24 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
+        "absolute size-8 rounded-full md:flex hidden",
         orientation === "horizontal"
-          ? "top-1/2 -right-12 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+          ? "top-1/2 -end-12 -translate-y-1/2"
+          : "-bottom-12 start-1/2 -translate-x-1/2 rotate-90",
         className,
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
+      {orientation === "horizontal" ? (
+        <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+      ) : (
+        <ArrowRight className="h-4 w-4" />
+      )}
       <span className="sr-only">Next slide</span>
     </Button>
   );
 }
 
-export {
-  type CarouselApi,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-};
+export { type CarouselApi, Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext };

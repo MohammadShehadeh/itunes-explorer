@@ -10,10 +10,7 @@ import { appRouter, createTRPCContext } from "@/server";
 const setCorsHeaders = (res: Response) => {
   res.headers.set("Access-Control-Allow-Origin", env.NEXT_PUBLIC_APP_URL);
   res.headers.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST");
-  res.headers.set(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization",
-  );
+  res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 };
 
 export const OPTIONS = () => {

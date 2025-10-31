@@ -3,8 +3,8 @@ import { env } from "@/env";
 
 export default defineConfig({
   dialect: "postgresql",
-  out: "./db/migrations",
-  schema: "./db/schema.ts",
+  out: "./src/db/migrations",
+  schema: "./src/db/schema.ts",
   strict: true,
   verbose: true,
   dbCredentials: {

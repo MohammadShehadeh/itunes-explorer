@@ -4,12 +4,16 @@ import { z } from "zod";
 export const env = createEnv({
   server: {
     DATABASE_URL: z.url(),
+    ITUNES_SEARCH_API: z.url(),
+  },
+  shared: {
     NODE_ENV: z.enum(["development", "production"]),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.url(),
   },
   experimental__runtimeEnv: {
+    NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
 });

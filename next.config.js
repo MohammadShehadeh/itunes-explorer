@@ -7,6 +7,13 @@ jiti.import("./src/env");
 
 /** @type {import('next').NextConfig} */
 export default {
-  /* config options here */
   reactCompiler: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "is1-ssl.mzstatic.com",
+      },
+    ],
+  },
 };
