@@ -3,12 +3,12 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    DATABASE_URL: z.url(),
-    ITUNES_SEARCH_API: z.url(),
+    DATABASE_URL: z.string(),
+    ITUNES_SEARCH_API: z.string(),
   },
   shared: {
     NODE_ENV: z.enum(["development", "production"]),
-    VERCEL_URL: z.url(),
+    VERCEL_URL: z.string(),
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
