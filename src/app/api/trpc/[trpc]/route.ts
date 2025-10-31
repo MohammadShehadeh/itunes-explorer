@@ -8,7 +8,7 @@ import { appRouter, createTRPCContext } from "@/server";
  * You should extend this to match your needs
  */
 const setCorsHeaders = (res: Response) => {
-  res.headers.set("Access-Control-Allow-Origin", env.VERCEL_URL);
+  res.headers.set("Access-Control-Allow-Origin", env.NEXT_PUBLIC_VERCEL_URL);
   res.headers.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST");
   res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 };

@@ -8,10 +8,10 @@ export const env = createEnv({
   },
   shared: {
     NODE_ENV: z.enum(["development", "production"]),
-    VERCEL_URL: z.string(),
+    NEXT_PUBLIC_VERCEL_URL: z.string(),
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    VERCEL_URL: process.env.VERCEL_URL,
+    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
   },
 });
