@@ -18,7 +18,9 @@ export default async function HomePage() {
 
       <section className="space-y-18 container">
         <section className="space-y-4 empty:hidden">
-          <PodcastSearchList />
+          <Suspense>
+            <PodcastSearchList />
+          </Suspense>
         </section>
 
         <section className="space-y-4">
