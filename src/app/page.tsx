@@ -5,6 +5,8 @@ import { PodcastList, PodcastSearchList } from "./_components/podcast-list";
 import { PodcastListSkeleton } from "./_components/podcast-skeletons";
 import { SearchBarForm } from "./_components/search-bar";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const fanjanPromise = api.search.get({ query: "فنجان" });
   const newsPromise = api.search.get({ query: "الأخبار" });
@@ -18,9 +20,7 @@ export default async function HomePage() {
 
       <section className="space-y-18 container">
         <section className="space-y-4 empty:hidden">
-          <Suspense>
-            <PodcastSearchList />
-          </Suspense>
+          <PodcastSearchList />
         </section>
 
         <section className="space-y-4">
