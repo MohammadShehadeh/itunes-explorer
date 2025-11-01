@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { Direction } from "@/components/direction";
 import { Footer } from "@/components/footer";
-import { TransitionProvider } from "@/providers/transition-provider";
 import { TRPCReactProvider } from "@/trpc/react";
 import { HydrateClient } from "@/trpc/server";
 
